@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Schedule Table</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="script.js"></script>
+</head>
+<body>
+    <style>
+        body{
+            display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+        
+    </style>
+    <div class="header-box">
+    <h1>Schedule Table</h1>
+</div>
+    <form id="create-form">
+        <h2>Create</h2>
+        <input type="text" id="subject" placeholder="Subject">
+        <input type="text" id="day" placeholder="Day">
+        <input type="text" id="time" placeholder="Time">
+        <input type="text" id="room" placeholder="Room">
+        <input type="text" id="instructor" placeholder="Instructor">
+        <button type="button" onclick="createRecord()">Create</button>
+    </form>
+
+    <form id="update-form">
+        <h2>Update</h2>
+        <input type="text" id="update-id" placeholder="ID">
+        <input type="text" id="update-subject" placeholder="Subject">
+        <input type="text" id="update-day" placeholder="Day">
+        <input type="text" id="update-time" placeholder="Time">
+        <input type="text" id="update-room" placeholder="Room">
+        <input type="text" id="update-instructor" placeholder="Instructor">
+        <button type="button" onclick="updateRecord()">Update</button>
+    </form>
+
+    <form id="delete-form">
+        <h2>Delete</h2>
+        <input type="text" id="delete-id" placeholder="ID">
+        <button type="button" onclick="deleteRecord()">Delete</button>
+    </form>
+
+    <h2>Subject Schedule</h2>
+    <ul id="record-list"></ul>
+
+    <script>
+        let records = [];
+        let recordId = 1;
+
+        function createRecord() {
+            const subject = document.getElementById("subject").value;
+            const day = document.getElementById("day").value;
+            const time = document.getElementById("time").value;
+            const room = document.getElementById("room").value;
+            const instructor = document.getElementById("instructor").value;
+
+            const newRecord = { id: recordId++, subject, day, time, room, instructor };
+            records.push(newRecord);
+
+            displayRecords();
+            clearForm("create-form");
+        }
+
+        function displayRecords() {
+            const recordList = document.getElementById("record-list");
+            recordList.innerHTML = "";
+
+            for (const record of records) {
+                const li = document.createElement("li");
+                li.innerHTML = `ID: ${record.id}, Subject: ${record.subject}, Day: ${record.day}, Time: ${record.time}, Room: ${record.room}, Instructor: ${record.instructor}`;
+                recordList.appendChild(li);
+            }
+        }
+
+        function clearForm(formId) {
+            const form = document.getElementById(formId);
+            form.reset();
+        }
+
+        function updateRecord() {
+            const id = document.getElementById("update-id").value;
+            const subject = document.getElementById("update-subject").value;
+            const day = document.getElementById("update-day").value;
+            const time = document.getElementById("update-time").value;
+            const room = document.getElementById("update-room").value;
+            const instructor = document.getElementById("update-instructor").value;
+
+            const recordToUpdate = records.find(record => record.id == id);
+
+            if (recordToUpdate) {
+                if (subject) {
+                    recordToUpdate.subject = subject;
+                }
+                if (day) {
+                    recordToUpdate.day = day;
+                }
+                if (time) {
+                    recordToUpdate.time = time;
+                }
+                if (room) {
+                    recordToUpdate.room = room;
+                }
+                if (instructor) {
+                    recordToUpdate.instructor = instructor;
+                }
+                displayRecords();
+                clearForm("update-form");
+            } else {
+                alert("Record not found");
+            }
+        }
+
+        function deleteRecord() {
+            const id = document.getElementById("delete-id").value;
+            const index = records.findIndex(record => record.id == id);
+
+            if (index !== -1) {
+                records.splice(index, 1);
+                displayRecords();
+                clearForm("delete-form");
+            } else {
+                alert("Record not found");
+            }
+        }
+
+        
+        displayRecords();
+    </script>
+</body>
+</html>
